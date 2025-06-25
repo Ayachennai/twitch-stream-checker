@@ -39,7 +39,9 @@ pip install -r requirements.txt
 
 ### 3. 設定 `config.json`
 
-將專案中的 `config.json` 檔案打開，並填入您的資訊。如果檔案不存在，第一次執行 `twitch_checker.py` 時會自動建立。
+1.  在專案中找到 `config.example.json` 這個範本檔案。
+2.  將它**複製一份，並重新命名為 `config.json`**。
+3.  用文字編輯器打開您剛剛建立的 `config.json` 檔案，並填入您的資訊。
 
 -   `client_id`: 貼上您剛剛取得的 Client ID。
 -   `client_secret`: 貼上您剛剛取得的 Client Secret。

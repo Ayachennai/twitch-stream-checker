@@ -1,0 +1,15 @@
+{
+    "client_id": "your_client_id_here",
+    "client_secret": "your_client_secret_here",
+    "streamers": [
+        "shroud",
+        "pokimane"
+    ],
+    "check_interval_seconds": 60,
+    "browser_path": "",
+    "user_data_dir": "",
+    "auto_open_settings": {
+        "shroud": true,
+        "pokimane": true
+    }
+}
