@@ -1,0 +1,7 @@
+customtkinter
+requests
+Pillow
+pystray
+selenium
+webdriver-manager
+undetected-chromedriver
