@@ -14,3 +14,8 @@ chrome_profiles/
 # 忽略其他暫存或編輯器產生的檔案
 .serena/
 *.html
+
+# 忽略 PyInstaller 產生的檔案
+build/
+dist/
+*.spec

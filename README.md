@@ -69,7 +69,19 @@ pip install -r requirements.txt
 }
 ```
 
-## 🚀 如何執行
+## 📦 下載與執行 (推薦給一般使用者)
+
+如果您不想安裝 Python 或處理程式碼，可以直接下載打包好的執行檔：
+
+1.  前往本專案的 [**Releases**](https://github.com/Ayachennai/twitch-stream-checker/releases) 頁面。
+2.  下載最新版本的 `TwitchStreamChecker.exe` 檔案。
+3.  在您電腦的任何地方，建立一個新的資料夾 (例如 `我的Twitch工具`)。
+4.  將下載的 `TwitchStreamChecker.exe` 放到這個資料夾中。
+5.  **依照下面的「設定教學」**，在同一個資料夾中建立並設定好您的 `config.json` 檔案。
+6.  完成後，直接點兩下執行 `TwitchStreamChecker.exe` 即可！
+
+## 🚀 如何執行 (開發者)
+
 
 完成以上設定後，在終端機或命令提示字元中，切換到專案目錄下，然後執行：
 
