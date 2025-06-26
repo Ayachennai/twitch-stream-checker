@@ -432,17 +432,27 @@ class TwitchApp(customtkinter.CTk):
             options.add_argument("--autoplay-policy=no-user-gesture-required")
             options.add_argument("--mute-audio") # 保持靜音啟動
 
-            # 使用 undetected_chromedriver 啟動
-            # 使用 webdriver-manager 來取得正確的驅動程式路徑
-            driver_path = ChromeDriverManager().install()
+                  # --- 關鍵修改：簡化 WebDriver 初始化並加強錯誤處理 ---
+            try:
+                logging.info("準備初始化 WebDriver...")
+                # 使用 webdriver-manager 來取得驅動路徑，這是最穩定的方式
+                driver_path = ChromeDriverManager().install()
+                logging.info(f"使用 ChromeDriver 路徑: {driver_path}")
 
-            # 傳入瀏覽器和驅動程式的路徑，確保版本完全匹配
-            driver = uc.Chrome(
-                browser_executable_path=chrome_path,
-                driver_executable_path=driver_path,
-                options=options, 
-                port=port
-            )
+                # 移除 browser_executable_path，讓 undetected_chromedriver 自動尋找瀏覽器
+                driver = uc.Chrome(
+                    driver_executable_path=driver_path,
+                    options=options,
+                    port=port
+                )
+                logging.info(f"已為 {streamer} 成功建立新的 WebDriver 實例。")
+
+            except Exception as e:
+                # 如果在這裡出錯，記錄詳細日誌並安全退出
+                logging.error(f"初始化 WebDriver 時發生致命錯誤: {e}", exc_info=True)
+                # 之後可以換成彈出錯誤視窗
+                return # 終止此函式的執行
+            
             logging.info(f"已為 {streamer} 成功建立新的 WebDriver 實例。")
             
             self.webdriver_instances[streamer] = {'driver': driver, 'process': None}

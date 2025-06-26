@@ -1,35 +1,32 @@
 # Twitch 直播監控與自動登入工具
 
-這是一個功能強大的 Python 工具，它不僅能自動監控您喜愛的 Twitch 直播主，並在他們開播時自動開啟直播網頁，還能**保持您的 Twitch 登入狀態**，解決每次都要重新登入的煩惱。
+這是一個功能強大的 Python 工具，它不僅能監控您喜愛的 Twitch 直播主，並在他們開播時透過系統通知提醒您，還能自動開啟直播網頁。
 
-## ✨ 核心功能
+## 核心功能
 
-*   **保持登入狀態**：透過共享瀏覽器個人資料，您只需登入一次，未來即使重開程式，也能自動維持登入狀態，享受完整的 Twitch 互動體驗。
-*   **智慧型反偵測**：採用 `undetected-chromedriver` 技術，模擬真人瀏覽行為，有效繞過 Twitch 的機器人偵測，確保登入過程順暢無阻。
-*   **可靠的自動取消靜音**：透過 JavaScript 直接控制播放器，精準地取消直播靜音，不再受介面變動影響。
-*   **完整的 UI 控制介面**：
-    *   動態新增/刪除追蹤的直播主。
-    *   可為每位直播主單獨設定是否在開播時自動開啟視窗。
-    *   自由設定要用來開啟直播的瀏覽器程式路徑。
-    *   自由設定用於保存登入資訊的個人資料資料夾路徑。
-*   **系統托盤運行**：最小化後會在系統托盤顯示圖示，方便您隨時喚出或關閉程式。
+*   **API 監控**：透過 Twitch API 精準檢查直播狀態。
+*   **自動開啟網頁**：偵測到開播時，可自動使用 `undetected-chromedriver` 開啟直播頁面，模擬真人行為以避免被偵測。
+*   **系統通知**：當有追蹤的頻道開播時，會發送 Windows 系統通知。
+*   **系統托盤運行**：程式會常駐在系統托盤 (System Tray) 中，方便隨時操作或關閉。
+*   **可設定性**：可自由設定要監控的頻道列表和檢查的時間間隔。
 
-## 🛠️ 設定教學
+## 設定與安裝
 
-### 1. 安裝必要的套件
+### 1. 環境需求
+*   Python 3.12 (建議)
+*   Windows 作業系統
 
-在開始之前，請確保您已安裝 Python。然後在終端機或命令提示字元中，切換到專案目錄下，執行以下指令來安裝所有必要的套件：
-
+### 2. 安裝依賴套件
+在專案根目錄下開啟 PowerShell，並執行以下指令來安裝所有必要的套件：
 ```bash
 pip install -r requirements.txt
 ```
 
-### 2. 取得 Twitch API 金鑰
-
+### 3. 取得 Twitch API 金鑰
 本工具需要使用 Twitch API 來檢查直播狀態，因此您需要一組 API 金鑰 (Client ID 和 Client Secret)。
 
 1.  前往 [Twitch Developers Console](https://dev.twitch.tv/console) 並登入。
-2.  點擊「**註冊您的應用程式**」。
+2.  在左側選擇「應用程式」，然後點擊「**註冊您的應用程式**」。
 3.  **名稱**: 任意填寫，例如 `My Stream Checker`。
 4.  **OAuth Redirect URLs**: 填寫 `http://localhost`。
 5.  **分類**: 選擇「聊天機器人」或「網站整合」。
@@ -37,58 +34,55 @@ pip install -r requirements.txt
 7.  建立成功後，您會看到一組 **Client ID**。請複製它。
 8.  點擊「**新密鑰**」按鈕來產生一組 **Client Secret**。請複製並妥善保管它，此金鑰只會顯示一次。
 
-### 3. 設定 `config.json`
-
+### 4. 設定 `config.json`
 1.  在專案中找到 `config.example.json` 這個範本檔案。
 2.  將它**複製一份，並重新命名為 `config.json`**。
 3.  用文字編輯器打開您剛剛建立的 `config.json` 檔案，並填入您的資訊。
 
--   `client_id`: 貼上您剛剛取得的 Client ID。
--   `client_secret`: 貼上您剛剛取得的 Client Secret。
--   `streamers`: 在清單中填入您想追蹤的 Twitch 直播主帳號名稱 (小寫)。
--   `check_interval_seconds`: 檢查的間隔秒數，預設為 60 秒。
--   `browser_path`: 您想用來開啟直播的瀏覽器執行檔路徑 (可透過 UI 設定)。
--   `user_data_dir`: 用於保存登入資訊的 Chrome 個人資料夾路徑 (可透過 UI 設定)。
+*   `client_id`: 貼上您剛剛取得的 Client ID。
+*   `client_secret`: 貼上您剛剛取得的 Client Secret。
+*   `twitch_channels`: 在清單中填入您想監控的 Twitch 直播主帳號名稱 (英文小寫)。
+*   `check_interval_seconds`: 檢查的間隔秒數，預設為 60 秒。
 
 **範例 `config.json`:**
 ```json
 {
-    "client_id": "your_client_id_here",
-    "client_secret": "your_client_secret_here",
-    "streamers": [
-        "shroud",
-        "pokimane"
-    ],
-    "check_interval_seconds": 60,
-    "browser_path": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
-    "user_data_dir": "D:\\Windsurf_code\\twitch\\chrome_profile",
-    "auto_open_settings": {
-        "shroud": true,
-        "pokimane": true
-    }
+  "client_id": "your_client_id_here",
+  "client_secret": "your_client_secret_here",
+  "twitch_channels": [
+    "shroud",
+    "pokimane"
+  ],
+  "check_interval_seconds": 60
 }
 ```
 
-## 📦 下載與執行 (推薦給一般使用者)
-
-如果您不想安裝 Python 或處理程式碼，可以直接下載打包好的執行檔：
-
-1.  前往本專案的 [**Releases**](https://github.com/Ayachennai/twitch-stream-checker/releases) 頁面。
-2.  下載最新版本的 `TwitchStreamChecker.exe` 檔案。
-3.  在您電腦的任何地方，建立一個新的資料夾 (例如 `我的Twitch工具`)。
-4.  將下載的 `TwitchStreamChecker.exe` 放到這個資料夾中。
-5.  **依照下面的「設定教學」**，在同一個資料夾中建立並設定好您的 `config.json` 檔案。
-6.  完成後，直接點兩下執行 `TwitchStreamChecker.exe` 即可！
-
-## 🚀 如何執行 (開發者)
-
-
-完成以上設定後，在終端機或命令提示字元中，切換到專案目錄下，然後執行：
-
+## 如何執行
+完成以上設定後，在專案根目錄下開啟 PowerShell，然後執行：
 ```bash
 python twitch_checker.py
 ```
+程式將會啟動並最小化到系統托盤開始在背景監控。
 
-程式將會啟動並開始在背景監控。當有直播主開播時，您會看到終端機顯示訊息，並自動開啟瀏覽器視窗。
+## 如何打包成執行檔 (.exe)
 
-**第一次使用時，請在開啟的瀏覽器視窗中手動登入您的 Twitch 帳號。** 由於設定了 `user_data_dir`，您的登入資訊將被保存，未來開啟時即可自動登入。
+本專案使用 PyInstaller 進行打包。
+
+### 重要注意事項
+根據測試，最新的 PyInstaller 版本 (6.x) 可能會與某些 Windows 環境產生衝突，導致打包後的 `.exe` 檔案無法執行且沒有任何錯誤訊息。
+
+**請務必使用 PyInstaller 5.13.2 版本進行打包。**
+
+### 1. 安裝指定的 PyInstaller 版本
+```bash
+pip install pyinstaller==5.13.2
+```
+
+### 2. 執行打包
+使用專案內附的 `.spec` 檔案進行打包，可以確保所有資源都被正確包含：
+```bash
+pyinstaller twitch_checker.spec
+```
+
+### 3. 找到執行檔
+打包成功後，您可以在 `dist/TwitchStreamChecker` 資料夾中找到 `TwitchStreamChecker.exe`。將 `config.json` 檔案也複製到這個資料夾旁邊，就可以一起執行了。
