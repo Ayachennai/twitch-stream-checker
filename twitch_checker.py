@@ -430,7 +430,6 @@ class TwitchApp(customtkinter.CTk):
             # 不需要手動設定 binary_location，uc 會自動尋找
             options.add_argument(f'--user-data-dir={self.user_data_dir}')
             options.add_argument("--autoplay-policy=no-user-gesture-required")
-            options.add_argument("--mute-audio") # 保持靜音啟動
 
                   # --- 關鍵修改：簡化 WebDriver 初始化並加強錯誤處理 ---
             try:
